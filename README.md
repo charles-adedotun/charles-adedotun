@@ -1,6 +1,6 @@
 # Charles Adedotun
 
-Senior DevOps/SRE & AI Platform Engineer specializing in cloud infrastructure, Kubernetes orchestration, and AI-augmented development tooling. I build production-grade systems that scale and empower teams to ship faster.
+DevOps/SRE & AI Platform Engineer specializing in cloud infrastructure, Kubernetes orchestration, and AI-augmented development tooling. I build production-grade systems that scale and empower teams to ship faster.
 
 ## What I Do
 
