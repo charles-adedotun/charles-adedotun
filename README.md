@@ -2,6 +2,22 @@
 
 DevOps/SRE & AI Platform Engineer specializing in cloud infrastructure, Kubernetes orchestration, and AI-augmented development tooling. I build production-grade systems that scale and empower teams to ship faster.
 
+## Quick Evaluation (3 min)
+
+1. **K8s + AI integration** → [kubepulse](https://github.com/charles-adedotun/kubepulse) - run `docker-compose up` and see AI diagnostics
+2. **CLI tooling** → [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager) - check `homelab_manager/cli.py` for Click patterns
+3. **MCP expertise** → [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) - production MCP server with PyObjC
+
+## Skills → Proof of Work
+
+| Skill | Repository |
+|-------|-----------|
+| Kubernetes | [kubepulse](https://github.com/charles-adedotun/kubepulse) |
+| Docker/Compose | [homelab-setup](https://github.com/charles-adedotun/homelab-setup), [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager) |
+| Python CLI | [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager), [Lilith-Shell](https://github.com/charles-adedotun/Lilith-Shell) |
+| MCP/AI Tooling | [claude-code-sub-agents](https://github.com/charles-adedotun/claude-code-sub-agents), [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) |
+| Go | [kubepulse](https://github.com/charles-adedotun/kubepulse) |
+
 ## What I Do
 
 ### Platform & SRE
@@ -19,32 +35,32 @@ Exploring the frontier of AI-augmented development workflows:
 
 ## Featured Projects
 
-### [kubepulse](https://github.com/charlesadedotun/kubepulse)
+### [kubepulse](https://github.com/charles-adedotun/kubepulse)
 Kubernetes health monitoring with AI-powered diagnostics
 - Real-time cluster health checks with intelligent anomaly detection
 - Reduces mean time to resolution by surfacing actionable insights
 
-### [homelab-setup](https://github.com/charlesadedotun/homelab-setup)
+### [homelab-setup](https://github.com/charles-adedotun/homelab-setup)
 Docker-based homelab infrastructure with WireGuard VPN
 - Production-like environment for safe experimentation
 - Secure remote access and service orchestration
 
-### [dockerlab-manager](https://github.com/charlesadedotun/dockerlab-manager)
+### [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager)
 CLI tool for managing Docker services at scale
 - Simplifies multi-container orchestration workflows
 - Built for rapid local development and testing
 
-### [claude-code-sub-agents](https://github.com/charlesadedotun/claude-code-sub-agents) ⭐ 28
+### [claude-code-sub-agents](https://github.com/charles-adedotun/claude-code-sub-agents) ⭐ 28
 Meta-agent system that orchestrates specialized Claude Code agents
 - Enables complex, multi-domain task decomposition
 - Pioneering agent-first development patterns
 
-### [notifications-mcp-server](https://github.com/charlesadedotun/notifications-mcp-server) ⭐ 11
+### [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) ⭐ 11
 MCP server bringing native notifications to Claude Desktop
 - Bridges AI workflows with operating system capabilities
 - Enables proactive alerting from autonomous agents
 
-### [Lilith-Shell](https://github.com/charlesadedotun/Lilith-Shell)
+### [Lilith-Shell](https://github.com/charles-adedotun/Lilith-Shell)
 MCP server for secure terminal command execution
 - Safe, sandboxed shell access for AI agents
 - Security-first design with command validation and auditing
