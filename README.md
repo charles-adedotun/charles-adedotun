@@ -4,7 +4,7 @@ DevOps/SRE & AI Platform Engineer specializing in cloud infrastructure, Kubernet
 
 ## Quick Evaluation (3 min)
 
-1. **K8s + AI integration** → [kubepulse](https://github.com/charles-adedotun/kubepulse) - run `docker-compose up` and see AI diagnostics
+1. **K8s + AI integration** → [kubepulse](https://github.com/charles-adedotun/kubepulse) - run `make dev` or `docker-compose up`
 2. **CLI tooling** → [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager) - check `homelab_manager/cli.py` for Click patterns
 3. **MCP expertise** → [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) - production MCP server with PyObjC
 
