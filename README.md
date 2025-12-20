@@ -2,7 +2,7 @@
 
 DevOps/SRE & AI Platform Engineer specializing in cloud infrastructure, Kubernetes orchestration, and AI-augmented development tooling. I build production-grade systems that scale and empower teams to ship faster.
 
-## Quick Evaluation (3 min)
+## Quick Evaluation
 
 1. **K8s + AI integration** → [kubepulse](https://github.com/charles-adedotun/kubepulse) - run `make dev` or `docker-compose up`
 2. **CLI tooling** → [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager) - check `homelab_manager/cli.py` for Click patterns
