@@ -4,7 +4,7 @@ DevOps/SRE & AI Platform Engineer specializing in cloud infrastructure, Kubernet
 
 ## Quick Evaluation
 
-1. **K8s + AI integration** → [kubepulse](https://github.com/charles-adedotun/kubepulse) - run `make dev` or `docker-compose up`
+1. **K8s + AI integration** → [sre-plugin](https://github.com/charles-adedotun/sre-plugin) - run `/discover` against a live cluster, then `/dashboard <service>`
 2. **CLI tooling** → [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager) - check `homelab_manager/cli.py` for Click patterns
 3. **MCP expertise** → [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) - production MCP server with PyObjC
 
@@ -12,11 +12,12 @@ DevOps/SRE & AI Platform Engineer specializing in cloud infrastructure, Kubernet
 
 | Skill | Repository |
 |-------|-----------|
-| Kubernetes | [kubepulse](https://github.com/charles-adedotun/kubepulse) |
+| Kubernetes | [sre-plugin](https://github.com/charles-adedotun/sre-plugin), [kubepulse](https://github.com/charles-adedotun/kubepulse) |
+| Observability | [sre-plugin](https://github.com/charles-adedotun/sre-plugin) — Prometheus, Loki, Grafana, dashboards, SLOs, alert tuning |
 | Docker/Compose | [homelab-setup](https://github.com/charles-adedotun/homelab-setup), [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager) |
 | Python CLI | [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager), [Lilith-Shell](https://github.com/charles-adedotun/Lilith-Shell) |
 | MCP/AI Tooling | [claude-code-sub-agents](https://github.com/charles-adedotun/claude-code-sub-agents), [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) |
-| Go | [kubepulse](https://github.com/charles-adedotun/kubepulse) |
+| Claude Code Plugin | [sre-plugin](https://github.com/charles-adedotun/sre-plugin) |
 
 ## What I Do
 
@@ -35,10 +36,11 @@ Exploring the frontier of AI-augmented development workflows:
 
 ## Featured Projects
 
-### [kubepulse](https://github.com/charles-adedotun/kubepulse)
-Kubernetes health monitoring with AI-powered diagnostics
-- Real-time cluster health checks with intelligent anomaly detection
-- Reduces mean time to resolution by surfacing actionable insights
+### [sre-plugin](https://github.com/charles-adedotun/sre-plugin)
+Context-aware SRE skills for Claude Code — Prometheus, Loki, Grafana
+- Discovers your actual infrastructure and builds a living `.sre/` context — no hardcoded templates
+- Generates dashboards from real baselines, investigates incidents with live data, tunes alert thresholds
+- Proven on a live Kubernetes cluster: surfaced a CrashLoopBackOff before any alert fired
 
 ### [homelab-setup](https://github.com/charles-adedotun/homelab-setup)
 Docker-based homelab infrastructure with WireGuard VPN
@@ -68,7 +70,7 @@ MCP server for secure terminal command execution
 ## Tech Stack
 
 - **Cloud & Infra**: AWS, GCP, Terraform, Kubernetes, Docker, Helm
-- **Platform & Observability**: Prometheus, Grafana, Alertmanager, ELK/EFK stacks, distributed tracing
+- **Platform & Observability**: Prometheus, Grafana, Loki, Alertmanager, ELK/EFK stacks, distributed tracing
 - **CI/CD**: GitHub Actions, CircleCI, Jenkins, ArgoCD
 - **AI & Tooling**: Claude Code, Model Context Protocol (MCP), Python, Go
 
