@@ -1,88 +1,54 @@
 # Charles Adedotun
 
-DevOps/SRE & AI Platform Engineer specializing in cloud infrastructure, Kubernetes orchestration, and AI-augmented development tooling. I build production-grade systems that scale and empower teams to ship faster.
+AI Platform / DevTools engineer building containerized agent systems, MCP servers, and Kubernetes observability tooling.
 
-## Quick Evaluation
+I work at the boundary between infrastructure and AI-assisted operations: isolated agent runtimes, developer workflows, cluster-aware SRE tools, and small systems that are easy to inspect and operate.
 
-1. **K8s + AI integration** → [sre-plugin](https://github.com/charles-adedotun/sre-plugin) - run `/discover` against a live cluster, then `/dashboard <service>`
-2. **CLI tooling** → [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager) - check `homelab_manager/cli.py` for Click patterns
-3. **MCP expertise** → [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) - production MCP server with PyObjC
+## Current Focus
 
-## Skills → Proof of Work
+- Containerized AI agents with explicit filesystem, process, and credential boundaries
+- MCP servers that connect AI tools to operating-system and developer workflows
+- Kubernetes observability tools for discovery, dashboards, alert tuning, and incident investigation
+- CLI and automation tooling for Docker, homelab, and platform engineering workflows
 
-| Skill | Repository |
-|-------|-----------|
-| Kubernetes | [sre-plugin](https://github.com/charles-adedotun/sre-plugin), [kubepulse](https://github.com/charles-adedotun/kubepulse) |
-| Observability | [sre-plugin](https://github.com/charles-adedotun/sre-plugin) — Prometheus, Loki, Grafana, dashboards, SLOs, alert tuning |
-| Docker/Compose | [homelab-setup](https://github.com/charles-adedotun/homelab-setup), [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager) |
-| Python CLI | [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager), [Lilith-Shell](https://github.com/charles-adedotun/Lilith-Shell) |
-| MCP/AI Tooling | [claude-code-sub-agents](https://github.com/charles-adedotun/claude-code-sub-agents), [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) |
-| Claude Code Plugin | [sre-plugin](https://github.com/charles-adedotun/sre-plugin) |
+## Selected Work
 
-## What I Do
+| Project | Area | Notes |
+|---------|------|-------|
+| [MetaClaw](https://github.com/charles-adedotun/metaclaw) | Containerized agents | Node.js orchestrator for Claude agents running in isolated containers, with messaging channels, SQLite state, IPC, scheduled tasks, and mount validation |
+| [KubePulse](https://github.com/charles-adedotun/kubepulse) | Kubernetes monitoring | Go and React Kubernetes health monitor with cluster checks, alerting/SLO modules, AI diagnostics, Docker Compose, tests, and CI |
+| [sre-plugin](https://github.com/charles-adedotun/sre-plugin) | Kubernetes observability | Claude Code SRE tooling for cluster discovery, service dashboards, Prometheus/Loki/Grafana context, and alert investigation |
+| [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) | MCP | MCP server that exposes native macOS notifications to Claude Desktop and related agent workflows |
+| [auto-pr](https://github.com/charles-adedotun/auto-pr) | DevTools CLI | Go CLI that uses Claude Code plus `gh`/`glab` to generate pull request and merge request text from local git context |
+| [claude-code-sub-agents](https://github.com/charles-adedotun/claude-code-sub-agents) | Claude Code workflow | Lightweight installer for an `agent-architect` that creates project-specific Claude Code agents |
 
-### Platform & SRE
-Building and maintaining resilient infrastructure at scale. I focus on:
-- Infrastructure as code with Terraform and Kubernetes
-- Observability pipelines using Prometheus, Grafana, and modern logging stacks
-- Homelab environments for testing and R&D
-- Incident response and reliability engineering practices
+## Technical Areas
 
-### Agentic & AI Tooling
-Exploring the frontier of AI-augmented development workflows:
-- Building Claude Code sub-agents for complex, multi-step automation
-- Developing MCP servers that extend Claude Desktop capabilities
-- Creating tools that amplify developer productivity through intelligent automation
+**AI platform and agent systems**
 
-## Featured Projects
+- Claude Code, Claude Agent SDK, Model Context Protocol
+- Agent orchestration, per-session state, tool routing, IPC, and scheduled execution
+- Container isolation for agent workloads using Docker and Apple Container
 
-### [sre-plugin](https://github.com/charles-adedotun/sre-plugin)
-Context-aware SRE skills for Claude Code — Prometheus, Loki, Grafana
-- Discovers your actual infrastructure and builds a living `.sre/` context — no hardcoded templates
-- Generates dashboards from real baselines, investigates incidents with live data, tunes alert thresholds
-- Proven on a live Kubernetes cluster: surfaced a CrashLoopBackOff before any alert fired
+**Platform engineering**
 
-### [homelab-setup](https://github.com/charles-adedotun/homelab-setup)
-Docker-based homelab infrastructure with WireGuard VPN
-- Production-like environment for safe experimentation
-- Secure remote access and service orchestration
+- Kubernetes, Docker, Compose, Helm, Terraform
+- CI/CD with GitHub Actions and related automation
+- Linux/macOS service management, local infrastructure, and secure remote access
 
-### [dockerlab-manager](https://github.com/charles-adedotun/dockerlab-manager)
-CLI tool for managing Docker services at scale
-- Simplifies multi-container orchestration workflows
-- Built for rapid local development and testing
+**Observability and reliability**
 
-### [claude-code-sub-agents](https://github.com/charles-adedotun/claude-code-sub-agents) ⭐ 28
-Meta-agent system that orchestrates specialized Claude Code agents
-- Enables complex, multi-domain task decomposition
-- Pioneering agent-first development patterns
+- Prometheus, Grafana, Loki, Alertmanager
+- Cluster discovery, SLOs, dashboards, alert review, and incident workflows
+- SQLite-backed state, recovery paths, retries, and operational debugging
 
-### [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) ⭐ 11
-MCP server bringing native notifications to Claude Desktop
-- Bridges AI workflows with operating system capabilities
-- Enables proactive alerting from autonomous agents
+## How I Build
 
-### [Lilith-Shell](https://github.com/charles-adedotun/Lilith-Shell)
-MCP server for secure terminal command execution
-- Safe, sandboxed shell access for AI agents
-- Security-first design with command validation and auditing
-
-## Tech Stack
-
-- **Cloud & Infra**: AWS, GCP, Terraform, Kubernetes, Docker, Helm
-- **Platform & Observability**: Prometheus, Grafana, Loki, Alertmanager, ELK/EFK stacks, distributed tracing
-- **CI/CD**: GitHub Actions, CircleCI, Jenkins, ArgoCD
-- **AI & Tooling**: Claude Code, Model Context Protocol (MCP), Python, Go
-
-## Currently Exploring
-
-- Agent-first development environments where AI handles infrastructure orchestration
-- AI-augmented observability: using LLMs to predict incidents before they impact users
+- Keep the core system small enough to audit
+- Prefer explicit trust boundaries over broad permissions
+- Use automation to remove repetitive operational work
+- Document architecture, security assumptions, and known limitations
 
 ## Contact
 
-📧 charles.adedotun8@gmail.com
-
----
-
-*Building the future of platform engineering, one automation at a time.*
+Email: charles.adedotun8@gmail.com
