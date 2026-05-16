@@ -1,8 +1,8 @@
 # Charles Adedotun
 
-AI Platform / DevTools engineer building containerized agent systems, MCP servers, and Kubernetes observability tooling.
+I build AI-assisted platform engineering tools: containerized Claude agents, MCP servers, and Kubernetes/SRE automation.
 
-I work at the boundary between infrastructure and AI-assisted operations: isolated agent runtimes, developer workflows, cluster-aware SRE tools, and small systems that are easy to inspect and operate.
+My work sits at the boundary between infrastructure and AI-assisted operations: isolated agent runtimes, developer workflows, cluster-aware SRE tools, and small systems that are easy to inspect and operate.
 
 ## Current Focus
 
@@ -10,6 +10,14 @@ I work at the boundary between infrastructure and AI-assisted operations: isolat
 - MCP servers that connect AI tools to operating-system and developer workflows
 - Kubernetes observability tools for discovery, dashboards, alert tuning, and incident investigation
 - CLI and automation tooling for Docker, homelab, and platform engineering workflows
+
+## Flagship Projects
+
+| Project | What it proves |
+|---------|----------------|
+| [MetaClaw](https://github.com/charles-adedotun/metaclaw) | Containerized Claude agents with per-group filesystems, SQLite state, IPC, scheduled tasks, and explicit mount validation |
+| [KubePulse](https://github.com/charles-adedotun/kubepulse) | Kubernetes health and observability tooling across a Go backend, React frontend, CI, Docker Compose, and cluster checks |
+| [notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server) | A focused MCP utility with macOS notifications, Claude Desktop configuration, tests, and repeatable local verification |
 
 ## Selected Work
 
