@@ -1,8 +1,8 @@
 # Charles Adedotun
 
-**Safe Rust Systems & AI Execution Runtime Engineer**  
-Lagos, Nigeria (UTC+1 • Full US-East & EU synchronous overlap)  
-`charles.adedotun8@gmail.com` • `charles@krysp.org` • [GitHub (@charles-adedotun)](https://github.com/charles-adedotun)
+**Systems, Kubernetes Observability & AI Execution Runtime Engineer**  
+Remote (US Central • CT)  
+`charles.adedotun8@gmail.com` • [GitHub (@charles-adedotun)](https://github.com/charles-adedotun)
 
 ---
 
@@ -94,16 +94,17 @@ docker run --rm --entrypoint sh -v "$PWD:/workspace/project:ro" metaclaw-agent:l
 
 ---
 
-### 4. [`sops-gate`](https://github.com/charles-adedotun/sops-gate) — Safe Rust GitOps Secrets Pre-Commit Audit Gate
-*Parallelized, sub-second pre-commit audit gate and cryptographic recipient validator for SOPS+age GitOps repositories.*
+### 4. [`kubepulse`](https://github.com/charles-adedotun/kubepulse) — Kubernetes Health, SLO & AI Diagnostics Engine
+*Go CLI, concurrent health check engine, and React WebSocket dashboard for Kubernetes cluster observability and automated triage.*
 
-- **Zero-Daemon Secrets Model**: Replaces heavyweight secret manager daemons with GitOps-native `SOPS` + `age` encryption at rest (`secrets.enc.json`) and in-memory injection (`sops exec-env`).
-- **High-Throughput AST & Regex Traversal**: Scans multi-repository estates in < 150 ms using `rayon` thread pools, verifying that all secrets match target age recipient public keys before staging.
-- **Fail-Closed Pre-Commit Engine**: Intercepts unencrypted plaintext `.env` files, rogue AWS/GCP access keys, and malformed SOPS metadata before commits touch the Git DAG.
+- **Concurrent Check & SLO Engine**: Executes parallel pod, node, and service health checks via `k8s.io/client-go` (`pkg/core`, `pkg/health`), feeding an in-process SLO burn-rate tracker (`pkg/slo`), anomaly detector (`pkg/ml`), and rule-based alert manager (`pkg/alerts`).
+- **Circuit-Breaker AI Diagnostics & Safety-Checked Remediation**: Pairs deterministic cluster telemetry with circuit-broken AI root-cause analysis (`pkg/ai/circuit_breaker.go`) and dry-run/safety-checked `kubectl` remediation (`pkg/ai/remediation.go`).
+- **REST & Live WebSocket Server**: Serves cluster health scores, check results, and real-time topology updates via Gorilla Mux and WebSockets (`pkg/api/server.go`).
 
 ```bash
-# Verify sops-gate recipient auditing
-cargo run --manifest-path sops-gate/Cargo.toml -- --check-recipients --strict
+# Build and run the KubePulse CLI and test suite
+go test ./...
+make build && ./bin/kubepulse check pod-health
 ```
 
 ---
@@ -124,6 +125,11 @@ cargo run --manifest-path sops-gate/Cargo.toml -- --check-recipients --strict
 
 ---
 
+### 7. [`auto-pr`](https://github.com/charles-adedotun/auto-pr) — Git Context & Pull Request Automation CLI
+*Go CLI that inspects local Git diffs, branch topology, and repository label schemas to draft and publish structured pull requests and merge requests.*
+
+---
+
 ## Multi-Tenant Cloud Platform & Reliability
 
 Beyond systems code, I operate 4+ years of production multi-tenant Kubernetes and cloud infrastructure:
@@ -138,11 +144,11 @@ Beyond systems code, I operate 4+ years of production multi-tenant Kubernetes an
 ## Technical Stack & Systems Primitives
 
 ```
-Systems Programming    : Safe Rust (#![forbid(unsafe_code)], Tokio, Axum, Rayon, Nix)
+Systems Programming    : Safe Rust (#![forbid(unsafe_code)], Tokio, Axum, Rayon, Nix), Go
 Linux Systems & Kernel : posix_fadvise, cgroups v2, namespaces, UID/GID mapping, IPC
 Container Security     : Docker, OCI Hardening, Cap-Drop, Read-Only Rootfs, Volume Allowlists
 Agent Runtimes         : Model Context Protocol (MCP), Claude Code, Filesystem IPC
-Cloud & Orchestration  : Kubernetes (EKS, GKE, KinD), Docker Compose, Caddy
+Cloud & Orchestration  : Kubernetes (EKS, GKE, KinD, client-go), Docker Compose, Caddy
 Infrastructure as Code : Terraform, Helm, ArgoCD, GitHub Actions
 Observability & Ops    : Prometheus, Loki, Grafana, Alertmanager, OpenTelemetry
 Secrets Management     : SOPS, age, fail-closed in-memory injection
@@ -150,8 +156,8 @@ Secrets Management     : SOPS, age, fail-closed in-memory injection
 
 ---
 
-## Contact & Working Engagements
+## Contact
 
-- **Email**: `charles.adedotun8@gmail.com` | `charles@krysp.org`
-- **Location**: Lagos, Nigeria (UTC+1 • Synchronous overlap with US-East and European working hours)
-- **Contract Engagement**: Independent B2B Contractor / Employer of Record (via Deel or Remote.com)
+- **Email**: `charles.adedotun8@gmail.com`
+- **Location**: Remote (US Central • CT)
+- **GitHub**: [github.com/charles-adedotun](https://github.com/charles-adedotun)
