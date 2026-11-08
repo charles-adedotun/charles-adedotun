@@ -1,163 +1,126 @@
 # Charles Adedotun
 
-**Systems, Kubernetes Observability & AI Execution Runtime Engineer**  
-Remote (US Central • CT)  
-`charles.adedotun8@gmail.com` • [GitHub (@charles-adedotun)](https://github.com/charles-adedotun)
+**Senior Systems, Kubernetes Platform & AI Runtime Infrastructure Engineer**  
+Remote (US Central Overlap • UTC+1 / CT)  
+📫 [charles.adedotun8@gmail.com](mailto:charles.adedotun8@gmail.com) • 🏢 [@NeuBlink](https://github.com/NeuBlink)
 
 ---
 
-I build low-latency systems infrastructure and secure execution runtimes for autonomous AI agents. My work combines kernel-level Linux resource control, memory-safe systems programming in Safe Rust (`#![forbid(unsafe_code)]`), and multi-tenant Kubernetes platform reliability.
-
-### Core Systems Engineering Principles
-- **Kernel-Enforced Boundaries Over Userland Filters**: Language-level string filtering cannot substitute for OS primitives; sandboxes must enforce cgroups v2, network namespaces, read-only rootfilesystems, and dropped capabilities (`--cap-drop=ALL`).
-- **Deterministic Memory Footprints**: Zero-copy ring buffers and explicit page-cache management (`posix_fadvise`) prevent host memory thrashing and OS buffer bloat under sustained multi-gigabyte throughput.
-- **Fail-Closed Security by Construction**: Network boundaries intercept SSRF pivots at socket dial time; secrets architectures encrypt at rest via SOPS + age with strictly in-memory runtime injection.
+I design and operate low-latency systems software in **Safe Rust (`#![forbid(unsafe_code)]`)** and **Go**, alongside multi-tenant **Kubernetes (EKS/GKE)** platforms and **Model Context Protocol (MCP)** developer infrastructure. Across 4+ years of production platform engineering and 15,000+ lines of memory-safe Rust daemons, my work focuses on deterministic memory bounds, wire-protocol correctness, and fail-closed network security.
 
 ---
 
-## Systems Architecture & Production Runtimes
+## Production Systems & Platform Portfolio
 
-```
-┌────────────────────────────────────────────────────────────────────────────────────────┐
-│ PRODUCTION SYSTEMS CAPABILITY MATRIX                                                   │
-├──────────────────────────┬─────────────────────────────────────────────────────────────┤
-│ Systems Language         │ Safe Rust (#![forbid(unsafe_code)], zero unsafe blocks)      │
-│ Linux Kernel Primitives  │ posix_fadvise (page-cache drops), cgroups v2, namespaces   │
-│ Agent Sandbox Security   │ OCI isolation, read-only rootfs, non-root UID 10001, no-new-priv │
-│ Network Boundary Defenses│ SafeDnsResolver (socket dial-time SSRF & DNS-rebinding guard)│
-│ Secrets Architecture     │ GitOps SOPS + age, zero-daemon in-memory injection           │
-│ Multi-Tenant Kubernetes  │ 99.9% uptime, 25% cost cut (HPA), 60% MTTD cut (Prometheus/Loki)│
-└──────────────────────────┴─────────────────────────────────────────────────────────────┘
-```
+| Repository | Domain & Stack | Core Engineering Problem Solved | Key Measured / Verified Invariant |
+| :--- | :--- | :--- | :--- |
+| **[`airlock`](https://github.com/charles-adedotun/airlock)** | **Rust** (`#![forbid(unsafe_code)]`, Tokio, Axum, Nix) | High-throughput media streaming proxies thrash Linux page cache and expose internal networks to DNS-rebinding SSRF. | Evicts flushed segments via `posix_fadvise(..., POSIX_FADV_DONTNEED)` to hold RSS **< 32 MB** across 100+ GB streams; blocks RFC 1918/CGNAT/metadata IPs at socket dial time (`SafeDnsResolver`). |
+| **[`sonus-rs`](https://github.com/charles-adedotun/sonus-rs)** | **Rust** (`#![forbid(unsafe_code)]`, PipeWire, ChaCha20-Poly1305, RTP/RTSP) | Linux-to-HomePod AirPlay bridges suffer 2,000ms buffering delays, 5-bit software volume dynamic range loss, and 55+ MB Python daemon bloat. | Clamps RAOP presentation latency to **250.0ms** (`11,025` frames) with PipeWire `ProcessLatency` A/V lip-sync injection, 2nd-order `SpaDLL` clock recovery, hardware S5 DSP volume control, and **< 8 MB RSS**. |
+| **[`tail-gate`](https://github.com/charles-adedotun/tail-gate)** | **Rust** (`#![forbid(unsafe_code)]`, Hyper, Tokio UDS, Tailscale LocalAPI) | Reverse-proxying Tailscale traffic through Go/Caddy + Python TCP-to-Unix-socket relays consumed 50.9 MB RSS and traversed two extra loopback TCP stacks. | Connects directly to `tokio::net::UnixStream` sockets at **< 6 MB RSS** (88% reduction), enforces **RFC 9110 §15.5.22 HTTP 421** on unmapped hosts, scrubs 11 identity headers, and gates routes via `/localapi/v0/whois`. |
+| **[`reference-platform`](https://github.com/charles-adedotun/reference-platform)** | **Terraform HCL, Go, Helm, ArgoCD, Kyverno, OTel** | Multi-cloud Kubernetes bootstrap often lacks deterministic ordering between security policies, CRDs, observability, and workloads. | 4.2k LOC AWS EKS + GCP GKE Terraform modules, 9-wave ArgoCD GitOps bootstrap (Kyverno Wave `-5` → OTel Wave `2` → Go `TaskFlow` service Wave `10`), and trace-correlated structured logging. |
+| **[`stitch-rs`](https://github.com/charles-adedotun/stitch-rs)** | **Rust** (`#![forbid(unsafe_code)]`, JSON-RPC 2.0, MCP, CLI) | Upstream MCP tool schemas with nested `$defs`/`$ref` pointers fail strict LLM function-calling validators (e.g., Gemini `functionDeclarations`). | Recursive JSON Schema AST repair engine that injects missing `$defs`, flattens `$ref` trees for Gemini/OpenAI/Claude/MCP adapters, transforms FIFE image URLs, and redacts credentials in `Debug` impls. |
+| **[`kubepulse`](https://github.com/charles-adedotun/kubepulse)** | **Go** (`k8s.io/client-go`, Gorilla WebSockets, React) | Alert fatigue during cluster incidents without unified SLO burn-rate tracking and circuit-broken triage. | Concurrent pod/node/service health engine (`pkg/health`), sliding-window SLO burn-rate tracker (`pkg/slo`), circuit-broken AI root-cause analyzer (`pkg/ai/circuit_breaker.go`), and live WebSocket topology feed. |
 
 ---
 
-## Flagship Systems & Tools
+## Flagship Systems Deep-Dives
 
 ### 1. [`airlock`](https://github.com/charles-adedotun/airlock) — Safe Rust Streaming Proxy & Kernel Page-Cache Shield
-*High-throughput read-ahead media streaming engine, rolling DVR jitter shield, and single-upstream arbiter.*
+*High-throughput read-ahead media streaming engine, rolling DVR ring buffer, and single-upstream arbiter (`5,500+ LOC`, `#![forbid(unsafe_code)]`).*
 
-- **Zero-Unsafe Rust**: Built under `#![forbid(unsafe_code)]` using Tokio, Axum, and zero-copy byte buffers.
-- **Linux Page-Cache Ejection (`posix_fadvise`)**: Under high-throughput streaming writes, sequential segments rapidly pollute the host OS page cache, causing memory thrashing and I/O stalls. `airlock` executes `posix_fadvise(fd, 0, bytes_written, PosixFadviseAdvice::POSIX_FADV_DONTNEED)` on every segment flush, maintaining process RSS strictly under **< 32 MB** across 100+ GB rolling data windows.
-- **Dial-Time SSRF Neutralization (`SafeDnsResolver`)**: Implements `reqwest::dns::Resolve` to inspect resolved IP addresses directly at socket dial time—blocking RFC 1918 subnets, cloud metadata (`169.254.169.254`), Tailscale CGNAT (`100.64.0.0/10`), and IPv6-mapped IPv4 addresses before TCP handshake initiation.
-- **Type-Safe Credential Scrubber (`RedactedUrl`)**: Formally scrubs HTTP credentials and path tokens at the type system level across `Display`, `Debug`, and OpenTelemetry/Prometheus tracing pipelines.
-
-```bash
-# Verify airlock source safety and compile
-cargo check --manifest-path airlock/Cargo.toml
-cargo test --manifest-path airlock/Cargo.toml
-```
-
----
-
-### 2. [`agent-sandbox-evals`](https://github.com/charles-adedotun/agent-sandbox-evals) — Empirical Agent Containment Benchmark
-*Adversarial evaluation suite testing 22 attack vectors across agent execution tiers.*
-
-Evaluates the containment boundaries of LLM tool execution across three architectural paradigms:
-1. **Layer 0 (Raw Host)**: Unrestricted subprocess execution (typical agent defaults).
-2. **Layer 1 (Sanitized MCP Harness)**: Pre-execution AST verification, regex filtering, and path traversal guards.
-3. **Layer 2 (Hardened OCI Container)**: Non-root execution (UID 10001), `--read-only` rootfs, `--cap-drop=ALL`, `--security-opt=no-new-privileges`, and cgroups v2 resource caps.
-
-```
-┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ ADVERSARIAL CONTAINMENT BENCHMARK LEDGER                                                         │
-├──────────────────────────┬──────────────┬───────────────┬──────────────────┬─────────────────────┤
-│ Isolation Tier           │ Vectors Tested│ Intercept (ms)│ Containment Rate │ Failure Modes       │
-├──────────────────────────┼──────────────┼───────────────┼──────────────────┼─────────────────────┤
-│ Layer 0: Raw Host        │ 22           │ N/A           │ 22.7%            │ SSRF, Traversal, OOM│
-│ Layer 1: Sanitized MCP   │ 22           │ 0.10 ms       │ 90.9%            │ RAM Bomb / Disk Full│
-│ Layer 2: Hardened OCI    │ 22           │ N/A           │ 100.0%           │ Fully Contained     │
-└──────────────────────────┴──────────────┴───────────────┴──────────────────┴─────────────────────┘
-```
-*Empirical finding: Userland filtering blocks 100% of network pivot and path traversal vectors with sub-millisecond overhead (0.10 ms), but kernel-enforced cgroups are strictly mandatory to prevent host resource starvation (RAM/disk bombs).*
+- **Linux Page-Cache Ejection (`posix_fadvise`)**: Sequential multi-gigabyte media writes rapidly fill the Linux page cache and trigger `kswapd` stalls. `airlock` issues `posix_fadvise(fd, 0, bytes_written, PosixFadviseAdvice::POSIX_FADV_DONTNEED)` after every segment flush (`src/storage/segment.rs`), keeping resident memory under **< 32 MB** across 100+ GB rolling windows.
+- **Dial-Time SSRF Neutralization (`SafeDnsResolver`)**: Implements `reqwest::dns::Resolve` (`src/security/ssrf.rs`) to validate every DNS-resolved IP address prior to TCP handshake initiation—blocking loopback, RFC 1918 private subnets, cloud link-local metadata (`169.254.169.254`), Tailscale CGNAT (`100.64.0.0/10`), and IPv6-mapped IPv4 addresses.
+- **Type-Level Credential Redaction (`RedactedUrl`)**: Wraps upstream URLs so userinfo, query tokens, and sensitive path segments are scrubbed at the type boundary across `Display`, `Debug`, and Prometheus/OpenTelemetry spans.
 
 ```bash
-# Run the 22-vector automated security evaluation matrix
-pytest agent-sandbox-evals/tests/ -v
+git clone https://github.com/charles-adedotun/airlock.git && cd airlock
+cargo test --all-targets
+cargo clippy --all-targets -- -D warnings
 ```
 
 ---
 
-### 3. [`metaclaw`](https://github.com/charles-adedotun/metaclaw) — Containerized Agent Sandbox Architecture Spike
-*Systems architecture prototype evaluating isolated agent runtime execution and zero-network IPC.*
+### 2. [`sonus-rs`](https://github.com/charles-adedotun/sonus-rs) — Sub-250ms PipeWire to AirPlay 2 / RAOP Audio & DSP Engine
+*Real-time Linux audio engine and bidirectional DACP touch daemon written in Safe Rust (`6,800+ LOC`, `#![forbid(unsafe_code)]`).*
 
-- **Container Isolation Boundary**: Routes messaging-channel agent sessions into dedicated per-group OCI containers with non-root UID 10001, immutable read-only code mounts, and strict volume allowlists (`mount-allowlist.json`).
-- **Filesystem-Based IPC**: Eliminates internal network listeners by establishing an asynchronous JSON message-passing protocol over mounted directories (`/workspace/ipc/messages/`), ensuring agent subprocesses have zero lateral network access to the host orchestrator.
-- **Resource Boundary Defense**: Enforces CPU and memory limits per agent container, protecting multi-tenant hosts from runaway execution.
+- **HAP Transient SRP-6a & ChaCha20-Poly1305 Framing**: Implements ephemeral Curve25519 ECDH + HKDF-SHA512 key derivation (`pair-verify`), 1,024-byte chunked `HapSession` RTSP control framing, and **1,444-byte MTU-safe RTP audio packets** (`12B` RTP header + `1,408B` encrypted 352-sample stereo PCM + `16B` Poly1305 tag + `8B` LE nonce) that never fragment over 1,500-byte Ethernet/Wi-Fi MTUs.
+- **250ms Clamped Latency & PipeWire `ProcessLatency` Lip-Sync**: Overrides AirPlay's default 88,200-frame (2,000ms) buffer down to `latencyMin = latencyMax = 11025` (250.0ms) during RTSP `SETUP` and exports `ProcessLatency = 250,000,000 ns` on the PipeWire loopback node so Chromium, Firefox, and MPV automatically delay video rendering for frame-accurate lip-sync.
+- **2nd-Order `SpaDLL` Clock Recovery & Hardware S5 Volume**: Compensates crystal oscillator drift between the Linux host and Apple HomePod via a proportional-integral loop filter ($K_p = 0.05, K_i = 0.001$) while streaming bit-perfect `0 dBFS` PCM and driving the HomePod's hardware S5 amplifier via RTSP `SET_PARAMETER volume: <dBFS>`.
 
 ```bash
-# Verify container isolation boundary
-docker run --rm --entrypoint sh metaclaw-agent:latest -lc 'id -un && pwd'
-docker run --rm --entrypoint sh -v "$PWD:/workspace/project:ro" metaclaw-agent:latest \
-  -lc 'touch /workspace/project/.metaclaw-write-test 2>/dev/null || echo project-read-only'
+git clone https://github.com/charles-adedotun/sonus-rs.git && cd sonus-rs
+cargo test --all-targets
 ```
 
 ---
 
-### 4. [`kubepulse`](https://github.com/charles-adedotun/kubepulse) — Kubernetes Health, SLO & AI Diagnostics Engine
-*Go CLI, concurrent health check engine, and React WebSocket dashboard for Kubernetes cluster observability and automated triage.*
+### 3. [`tail-gate`](https://github.com/charles-adedotun/tail-gate) — RFC 9110 HTTP 421 Fail-Closed UDS & Tailscale Gateway
+*Zero-trust edge ingress proxy and native Unix Domain Socket router in Safe Rust (`1,000+ LOC`, `#![forbid(unsafe_code)]`).*
 
-- **Concurrent Check & SLO Engine**: Executes parallel pod, node, and service health checks via `k8s.io/client-go` (`pkg/core`, `pkg/health`), feeding an in-process SLO burn-rate tracker (`pkg/slo`), anomaly detector (`pkg/ml`), and rule-based alert manager (`pkg/alerts`).
-- **Circuit-Breaker AI Diagnostics & Safety-Checked Remediation**: Pairs deterministic cluster telemetry with circuit-broken AI root-cause analysis (`pkg/ai/circuit_breaker.go`) and dry-run/safety-checked `kubectl` remediation (`pkg/ai/remediation.go`).
-- **REST & Live WebSocket Server**: Serves cluster health scores, check results, and real-time topology updates via Gorilla Mux and WebSockets (`pkg/api/server.go`).
+- **Direct `UnixStream` Routing (< 6 MB RSS)**: Replaces a 50.9 MB Caddy container + Python TCP relay stack with direct `tokio::net::UnixStream` upstream dispatch, cutting resident memory by **88%** and eliminating two loopback TCP hops per request.
+- **RFC 9110 §15.5.22 HTTP 421 Misdirected Request Engine**: Rejects TLS connection-coalesced requests for unmapped `Host` authorities with `421 Misdirected Request` (`connection: close`) rather than falling back to a default vhost.
+- **11-Header Identity Scrubber & Tailscale `/localapi/v0/whois` Guard**: Strips 11 client-spoofable identity headers (`Forwarded`, `X-Auth-Request-*`, `X-Forwarded-*`, `X-Platform-Auth`, `X-Internal-Auth-Token`) before route evaluation and verifies peer node identity/ACL tags against `/var/run/tailscale/tailscaled.sock`.
 
 ```bash
-# Build and run the KubePulse CLI and test suite
-go test ./...
-make build && ./bin/kubepulse check pod-health
+git clone https://github.com/charles-adedotun/tail-gate.git && cd tail-gate
+cargo test --all-targets
 ```
 
 ---
 
-### 5. [`notifications-mcp-server`](https://github.com/charles-adedotun/notifications-mcp-server) — Model Context Protocol Utility
-*Native notification MCP server for background agent execution runtimes (16 GitHub stars).*
+### 4. [`reference-platform`](https://github.com/charles-adedotun/reference-platform) & [`kubepulse`](https://github.com/charles-adedotun/kubepulse) — Cloud-Native Kubernetes Platform & Observability
+*End-to-end AWS EKS / GCP GKE Terraform modules, ArgoCD sync-wave GitOps, Kyverno policy enforcement, and Go cluster diagnostics.*
 
-- Exposes OS-level async notifications and acoustic alerts to AI developer environments (Claude Desktop, Claude Code).
-- Provides deterministic completion signals for long-running compile, test, and infrastructure automation tasks without polling.
+- **Multi-Cloud IaC & Sync-Wave GitOps (`reference-platform`)**: 4,200+ LOC of modular Terraform (VPC, EKS/GKE managed node groups, keyless GitHub OIDC IAM, S3/GCS remote state) paired with an ArgoCD app-of-apps bootstrap ordered across waves `-5` (Kyverno baseline policies) through `0..2` (`kube-prometheus-stack`, `loki-stack`, `opentelemetry-collector`) to `10` (`TaskFlow` Go REST/worker/cron microservice).
+- **Concurrent K8s Health & SLO Engine (`kubepulse`)**: Built on `k8s.io/client-go` to execute concurrent pod, node, and service diagnostics, compute error-budget burn rates, and stream live cluster health topologies over Gorilla WebSockets.
 
----
-
-### 6. [`claude-code-sub-agents`](https://github.com/charles-adedotun/claude-code-sub-agents) — Modular Sub-Agent Bootstrapper
-*Deterministic configuration framework for project-specific sub-agents (33 GitHub stars).*
-
-- Installs lightweight agent-architect primitives into developer workspaces to orchestrate specialized testing, auditing, and platform workflows.
-- Eliminates configuration bloat by maintaining isolated, auditable markdown skill boundaries.
-
----
-
-### 7. [`auto-pr`](https://github.com/charles-adedotun/auto-pr) — Git Context & Pull Request Automation CLI
-*Go CLI that inspects local Git diffs, branch topology, and repository label schemas to draft and publish structured pull requests and merge requests.*
-
----
-
-## Multi-Tenant Cloud Platform & Reliability
-
-Beyond systems code, I operate 4+ years of production multi-tenant Kubernetes and cloud infrastructure:
-
-- **99.9% Service Reliability**: Managed production Kubernetes clusters across AWS (EKS) and GCP (GKE), configuring ingress, service meshes, network security policies, and zero-downtime rolling updates.
-- **Cloud Financial Engineering**: Reduced cloud infrastructure spend by **25%** through Horizontal Pod Autoscaler (HPA) tuning, pod resource requests/limits right-sizing, and automated spot/preemptible node instance scheduling.
-- **Telemetry & MTTR Optimization**: Built unified observability pipelines (Prometheus, Loki, Alertmanager, Grafana), reducing Mean Time to Detection (MTTD) by **60%** and Mean Time to Remediation (MTTR) by **45%**.
-- **Automated GitOps Pipelines**: Engineered automated release pipelines via ArgoCD and GitHub Actions, reducing deployment lead time by **40%** with automated health checks and fail-forward remediation.
-
----
-
-## Technical Stack & Systems Primitives
-
-```
-Systems Programming    : Safe Rust (#![forbid(unsafe_code)], Tokio, Axum, Rayon, Nix), Go
-Linux Systems & Kernel : posix_fadvise, cgroups v2, namespaces, UID/GID mapping, IPC
-Container Security     : Docker, OCI Hardening, Cap-Drop, Read-Only Rootfs, Volume Allowlists
-Agent Runtimes         : Model Context Protocol (MCP), Claude Code, Filesystem IPC
-Cloud & Orchestration  : Kubernetes (EKS, GKE, KinD, client-go), Docker Compose, Caddy
-Infrastructure as Code : Terraform, Helm, ArgoCD, GitHub Actions
-Observability & Ops    : Prometheus, Loki, Grafana, Alertmanager, OpenTelemetry
-Secrets Management     : SOPS, age, fail-closed in-memory injection
+```bash
+git clone https://github.com/charles-adedotun/reference-platform.git && cd reference-platform
+make test
 ```
 
 ---
 
-## Contact
+### 5. [`stitch-rs`](https://github.com/charles-adedotun/stitch-rs) — Safe Rust MCP Client & Recursive Schema Compiler
+*Rust SDK and CLI (`stitch-cli`) for autonomous UI generation over JSON-RPC 2.0 / MCP (`2,000+ LOC`, `#![forbid(unsafe_code)]`).*
 
-- **Email**: `charles.adedotun8@gmail.com`
-- **Location**: Remote (US Central • CT)
-- **GitHub**: [github.com/charles-adedotun](https://github.com/charles-adedotun)
+- **Recursive JSON Schema Repair (`src/schema_repair.rs`)**: Automatically injects missing `$defs` (`ScreenInstance`, `SelectedScreenInstance`, `File`, `VariantOptions`) and recursively flattens `$ref` pointers so tool definitions pass strict Google Gemini `functionDeclarations`, OpenAI/Claude `tools`, and MCP `inputSchema` validators without runtime schema rejection.
+- **Typed Error Taxonomy & Redacted Dual Auth (`src/auth.rs`, `src/errors.rs`)**: Supports `X-Goog-Api-Key` and OAuth Bearer + `X-Goog-User-Project` authentication with custom `Debug` implementations that redact secrets, plus typed retry classification (`RateLimited`, `AuthFailed`, `PermissionDenied`, `NotFound`).
+
+```bash
+git clone https://github.com/charles-adedotun/stitch-rs.git && cd stitch-rs
+cargo test --all-targets
+```
+
+---
+
+## Open-Source Developer Tooling & Community Contributions
+
+| Project / Contribution | Adoption / Status | What It Does |
+| :--- | :---: | :--- |
+| **[`claude-code-sub-agents`](https://github.com/charles-adedotun/claude-code-sub-agents)** | **★ 33 Stars** | Lightweight sub-agent bootstrapper and modular `.claude/agents/` skill installer for Claude Code workspaces; preserves existing project `CLAUDE.md` context while registering specialized workflow agents. |
+| **[`notifications-mcp-server`](https://github.com/charles-adedotun/notifications-mcp-server)** | **★ 16 Stars** | macOS Model Context Protocol (`FastMCP`) server delivering non-blocking acoustic (`afplay`) and visual (`terminal-notifier` / `osascript`) completion signals for long-running agent tasks (`uvx --from git+https://github.com/charles-adedotun/notifications-mcp-server claude-notifications`). |
+| **[`modelcontextprotocol/python-sdk#2573`](https://github.com/modelcontextprotocol/python-sdk/pull/2573)** | **Upstream PR** | Regression-tested fix (`+59/-0`) preventing JSON-RPC envelope field collisions during MCP message forwarding. |
+| **[`agent-sandbox-evals`](https://github.com/charles-adedotun/agent-sandbox-evals)** | **22-Vector Suite** | Adversarial containment benchmark evaluating SSRF, path traversal, privilege escalation, and resource exhaustion across raw host (`Layer 0`), pre-execution filter (`Layer 1`), and hardened `--cap-drop=ALL` `--read-only` OCI container (`Layer 2`) harnesses. |
+| **[`auto-pr`](https://github.com/charles-adedotun/auto-pr)** | **Go CLI** | CLI tool that inspects local Git diffs, commit history, and repository label schemas to draft and publish structured pull requests and GitLab merge requests. |
+
+---
+
+## Production Reliability Track Record
+
+- **Multi-Tenant Kubernetes Reliability (99.9% Uptime)**: Operated production AWS EKS and GCP GKE clusters across 4+ years, managing ingress gateways, network policies, Kyverno admission guardrails, and zero-downtime rolling deployments.
+- **Cloud FinOps (-25% Spend)**: Reduced cloud compute spend by 25% through Horizontal Pod Autoscaler (HPA) tuning, workload request/limit right-sizing, and spot/preemptible node pool scheduling.
+- **Observability & Incident Response (-60% MTTD / -45% MTTR)**: Architected unified Prometheus, Loki, Alertmanager, Grafana, and OpenTelemetry pipelines with trace-correlated structured logging and automated runbooks.
+- **GitOps Delivery (-40% Lead Time)**: Built declarative ArgoCD and GitHub Actions release pipelines with automated smoke gates and fail-forward rollback.
+
+---
+
+## Technical Stack
+
+| Domain | Technologies & Primitives |
+| :--- | :--- |
+| **Systems Programming** | Safe Rust (`#![forbid(unsafe_code)]`, Tokio, Axum, Hyper, Serde, Nix, Socket2), Go (`client-go`), Python, Bash |
+| **Linux & Networking** | `posix_fadvise`, PipeWire SPA/Loopback, Unix Domain Sockets, RFC 9110 HTTP/2, RTP/RTSP, ChaCha20-Poly1305, SRP-6a, Tailscale LocalAPI |
+| **Cloud & Orchestration** | Kubernetes (AWS EKS, GCP GKE, Kind, K3s), Docker / OCI Containers (`--cap-drop=ALL`, `--read-only`, cgroups v2), Envoy Gateway |
+| **IaC & GitOps** | Terraform (HCL), Helm, ArgoCD (Sync Waves / App-of-Apps), Kyverno, GitHub Actions (Keyless OIDC), SOPS + `age` |
+| **Observability & AI Protocols** | Prometheus, Loki, Grafana, Alertmanager, OpenTelemetry, Model Context Protocol (MCP / JSON-RPC 2.0) |
