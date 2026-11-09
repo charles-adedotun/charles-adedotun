@@ -2,7 +2,7 @@
 
 Infrastructure & systems engineer building **AI-agent-powered workflows**, developer tooling, and self-hosted platforms in **Rust**, **Go**, and **Python**.
 
-📫 [charles.adedotun8@gmail.com](mailto:charles.adedotun8@gmail.com) · 🏢 [@NeuBlink](https://github.com/NeuBlink)
+📫 [charles.adedotun8@gmail.com](mailto:charles.adedotun8@gmail.com)
 
 ---
 
