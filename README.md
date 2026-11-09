@@ -31,4 +31,4 @@ Most of my day-to-day work lives in a private, self-hosted operations platform (
 
 ### Background
 
-4+ years running production Kubernetes platforms (AWS EKS, GCP GKE), Terraform infrastructure, observability stacks (Prometheus, Loki, Grafana, OpenTelemetry), and CI/CD pipelines.
+5+ years running production Kubernetes platforms (AWS EKS, GCP GKE), Terraform infrastructure, observability stacks (Prometheus, Loki, Grafana, OpenTelemetry), and CI/CD pipelines.
