@@ -20,7 +20,6 @@ Systems & infrastructure engineer building networking daemons, Linux media/audio
 - **[notifications-mcp-server](https://github.com/charles-adedotun/notifications-mcp-server)** *(★ 16)* — macOS notification server for Model Context Protocol (MCP) clients that plays a sound or shows a banner when long-running tasks finish.
 - **[agent-sandbox-evals](https://github.com/charles-adedotun/agent-sandbox-evals)** — Test suite measuring what untrusted AI agent code can access across raw hosts, pre-execution filters, and locked-down containers.
 - **[auto-pr](https://github.com/charles-adedotun/auto-pr)** — Go CLI that inspects local Git diffs and commit history to draft pull requests and GitLab merge requests.
-- **[modelcontextprotocol/python-sdk#2573](https://github.com/modelcontextprotocol/python-sdk/pull/2573)** — Upstream fix for JSON-RPC field collisions during MCP message forwarding.
 
 ### Background
 
